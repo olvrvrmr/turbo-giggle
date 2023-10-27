@@ -27,5 +27,10 @@ namespace TaskManagement
         {
             return _taskQueue.Count;
         }
+
+        public IEnumerable<Task> GetTasks()
+        {
+            return _taskQueue;
+        }
     }
 }
