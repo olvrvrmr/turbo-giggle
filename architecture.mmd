@@ -35,7 +35,7 @@ graph TB
             BackupManager-->AuditTrail;
         end
 
-        CM[Configuration Manager] -->|Update Settings| MQ[Message Queue]
+        ConfigurationManager -->|Update Settings| MQ[Message Queue]
         Scheduler -->|Trigger Events| MQ
         MQ -->|Receive Trigger Events| SyncEngine
         SyncEngine -->|Results & Logs| MQ
@@ -49,7 +49,7 @@ graph TB
 
     subgraph Others
         MQ
-        DB[Database]
+        DB[(Database)]
     end
     
     MQ -->|Update Records| DB
