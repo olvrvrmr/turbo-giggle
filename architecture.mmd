@@ -19,7 +19,7 @@ graph TB
     subgraph Frontend
         UI[User Interface] -->|Configure & Monitor| MQ
         MQ -->|Real-time Monitoring| UI
-        Auth[External Authentication Provider] -->|Authenticate| UI
+        Auth[Authentication Provider] -->|Authenticate| UI
     end
 
     subgraph Others
