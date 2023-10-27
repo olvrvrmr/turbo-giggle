@@ -9,11 +9,27 @@ graph TB
             API[Scheduler API] --> TGM
             API --> CL
         end
+        
+        subgraph SyncEngine
+            ConnectorInterface-->DataFetcher;
+            ConnectorInterface-->DataSender;
+            DataFetcher-->TransformationEngine;
+            TransformationEngine-->DataSender;
+            SyncRulesEngine-->DataFetcher;
+            SyncRulesEngine-->DataSender;
+            ErrorHandler-.->DataFetcher;
+            ErrorHandler-.->DataSender;
+            StateManagement-->DataFetcher;
+            StateManagement-->DataSender;
+            EventDispatcher-.->SyncRulesEngine;
+            RateLimiter-.->DataFetcher;
+            RateLimiter-.->DataSender;
+        end
 
         CM[Configuration Manager] -->|Update Settings| MQ[Message Queue]
         Scheduler -->|Trigger Events| MQ
-        MQ -->|Receive Trigger Events| SE[Sync Engine]
-        SE -->|Results & Logs| MQ
+        MQ -->|Receive Trigger Events| SyncEngine
+        SyncEngine -->|Results & Logs| MQ
     end
 
     subgraph Frontend
@@ -28,6 +44,5 @@ graph TB
     end
     
     MQ -->|Update Records| DB
-    
-    
-    class UI,CM,Scheduler,SE,DB,MQ,Auth,TGM,CL,TQM,SM,EH,LM,API component;
+    class UI,CM,Scheduler,SyncEngine,DB,MQ,Auth,TGM,CL,TQM,SM,EH,LM,API,ConnectorInterface,DataFetcher,DataSender,TransformationEngine,SyncRulesEngine,ErrorHandler,StateManagement,EventDispatcher,RateLimiter component;
+

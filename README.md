@@ -37,7 +37,7 @@ Sync Engine → Message Queue → User Interface
 - Status updates and results are also sent to a topic the User Interface is subscribed to for real-time monitoring.
 
 
-### Moving Parts of the Scheduler
+### The Scheduler
 
 #### 1. Trigger Mechanism
 - **Functionality**: Responsible for initiating the tasks based on time or external triggers.
@@ -83,3 +83,35 @@ Sync Engine → Message Queue → User Interface
 5. **Error Handler** steps in if any task fails and decides on the course of action.
 6. **Logging and Monitoring** keeps track of all activities for auditing and performance monitoring.
 7. **Scheduler API** could be used for programmatic interactions.
+
+
+
+### The Sync Engine:
+
+1. **Connector Interface**: The primary point of interaction with external systems (like databases, APIs, etc.). The connector will abstract the nitty-gritty details of connecting to different types of systems.
+
+2. **Transformation Engine**: Responsible for transforming data from the source format to the target format. This may include mapping fields, data type conversions, applying business rules, etc.
+
+3. **Data Fetcher**: Pulls data from the source system. It will use the connector interface to establish a connection and retrieve data based on the configuration.
+
+4. **Data Sender**: Pushes data to the target system. Again, it will use the connector interface but this time to send the transformed data to the target.
+
+5. **Sync Rules Engine**: Houses the business logic that decides what data to synchronize, when to do it, and what transformations to apply. 
+
+6. **Error Handler**: Handles errors during the synchronization process. This could include logging, retries, or alerting mechanisms.
+
+7. **State Management**: Manages the state of the sync operations. This is crucial for understanding what was last synchronized and what needs to be synchronized next.
+
+8. **Event Dispatcher**: Responsible for emitting events before and after sync operations. These events can trigger other parts of the system or external systems.
+
+9. **Rate Limiter**: Controls the rate of data sync to ensure you're not overloading either the source or the destination systems, or staying within API limits.
+
+### Data Flow:
+
+1. The **Scheduler** triggers a sync operation based on a schedule or event.
+2. **Sync Rules Engine** determines what needs to be synced.
+3. **Data Fetcher** fetches the required data from the source system.
+4. **Transformation Engine** transforms the fetched data.
+5. **Data Sender** pushes the transformed data to the destination system.
+6. **State Management** updates the state of the sync operation.
+7. **Event Dispatcher** emits relevant events.
