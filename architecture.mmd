@@ -1,0 +1,22 @@
+graph TB
+    subgraph Engine
+    CM[Configuration Manager] -->|Update Settings| MQ[Message Queue]
+    Scheduler[Scheduler] -->|Trigger Events| MQ
+    MQ -->|Receive Trigger Events| SE[Sync Engine]
+    SE -->|Results & Logs| MQ
+    end
+
+    subgraph Frontend
+    UI[User Interface] -->|Configure & Monitor| MQ
+    MQ -->|Real-time Monitoring| UI
+    Auth[Authentication Provider] -->|Authenticate| UI
+    end
+
+    subgraph Others
+    MQ
+    DB[Database]
+    end
+    
+    MQ -->|Update Records| DB
+    
+    class UI,CM,Scheduler,SE,DB,MQ,Auth component;
