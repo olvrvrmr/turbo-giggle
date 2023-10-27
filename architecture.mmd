@@ -1,22 +1,33 @@
 graph TB
     subgraph Engine
-    CM[Configuration Manager] -->|Update Settings| MQ[Message Queue]
-    Scheduler[Scheduler] -->|Trigger Events| MQ
-    MQ -->|Receive Trigger Events| SE[Sync Engine]
-    SE -->|Results & Logs| MQ
+        subgraph Scheduler
+            TGM[Trigger Mechanism] --> TQM[Task Queue Manager]
+            CL[Configuration Loader] --> TQM
+            TQM --> SM[State Manager]
+            SM --> EH[Error Handler]
+            SM --> LM[Logging & Monitoring]
+            API[Scheduler API] --> TGM
+            API --> CL
+        end
+
+        CM[Configuration Manager] -->|Update Settings| MQ[Message Queue]
+        Scheduler -->|Trigger Events| MQ
+        MQ -->|Receive Trigger Events| SE[Sync Engine]
+        SE -->|Results & Logs| MQ
     end
 
     subgraph Frontend
-    UI[User Interface] -->|Configure & Monitor| MQ
-    MQ -->|Real-time Monitoring| UI
-    Auth[Authentication Provider] -->|Authenticate| UI
+        UI[User Interface] -->|Configure & Monitor| MQ
+        MQ -->|Real-time Monitoring| UI
+        Auth[External Authentication Provider] -->|Authenticate| UI
     end
 
     subgraph Others
-    MQ
-    DB[Database]
+        MQ
+        DB[Database]
     end
     
     MQ -->|Update Records| DB
     
-    class UI,CM,Scheduler,SE,DB,MQ,Auth component;
+    
+    class UI,CM,Scheduler,SE,DB,MQ,Auth,TGM,CL,TQM,SM,EH,LM,API component;
