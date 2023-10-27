@@ -74,7 +74,7 @@ Sync Engine → Message Queue → User Interface
 - **Inputs**: API calls.
 - **Outputs**: Configuration updates, task initiations, etc.
 
-### Communication Flows
+#### Communication Flows
 
 1. **Configuration Loader** fetches the configuration details from the **Configuration Manager** via the **Message Queue**.
 2. **Trigger Mechanism** uses these configurations to create trigger events.
@@ -88,25 +88,34 @@ Sync Engine → Message Queue → User Interface
 
 ### The Sync Engine:
 
-1. **Connector Interface**: The primary point of interaction with external systems (like databases, APIs, etc.). The connector will abstract the nitty-gritty details of connecting to different types of systems.
+#### 1. Connector Interface
+The primary point of interaction with external systems (like databases, APIs, etc.). The connector will abstract the nitty-gritty details of connecting to different types of systems.
 
-2. **Transformation Engine**: Responsible for transforming data from the source format to the target format. This may include mapping fields, data type conversions, applying business rules, etc.
+#### 2. Transformation Engine
+Responsible for transforming data from the source format to the target format. This may include mapping fields, data type conversions, applying business rules, etc.
 
-3. **Data Fetcher**: Pulls data from the source system. It will use the connector interface to establish a connection and retrieve data based on the configuration.
+#### 3. Data Fetcher
+Pulls data from the source system. It will use the connector interface to establish a connection and retrieve data based on the configuration.
 
-4. **Data Sender**: Pushes data to the target system. Again, it will use the connector interface but this time to send the transformed data to the target.
+#### 4. Data Sender
+Pushes data to the target system. Again, it will use the connector interface but this time to send the transformed data to the target.
 
-5. **Sync Rules Engine**: Houses the business logic that decides what data to synchronize, when to do it, and what transformations to apply. 
+#### 5.Sync Rules Engine
+Houses the business logic that decides what data to synchronize, when to do it, and what transformations to apply. 
 
-6. **Error Handler**: Handles errors during the synchronization process. This could include logging, retries, or alerting mechanisms.
+#### 6. Error Handler
+Handles errors during the synchronization process. This could include logging, retries, or alerting mechanisms.
 
-7. **State Management**: Manages the state of the sync operations. This is crucial for understanding what was last synchronized and what needs to be synchronized next.
+#### 7. State Management
+Manages the state of the sync operations. This is crucial for understanding what was last synchronized and what needs to be synchronized next.
 
-8. **Event Dispatcher**: Responsible for emitting events before and after sync operations. These events can trigger other parts of the system or external systems.
+#### 8. Event Dispatcher
+Responsible for emitting events before and after sync operations. These events can trigger other parts of the system or external systems.
 
-9. **Rate Limiter**: Controls the rate of data sync to ensure you're not overloading either the source or the destination systems, or staying within API limits.
+#### 9. Rate Limiter
+Controls the rate of data sync to ensure you're not overloading either the source or the destination systems, or staying within API limits.
 
-### Data Flow:
+#### Data Flow:
 
 1. The **Scheduler** triggers a sync operation based on a schedule or event.
 2. **Sync Rules Engine** determines what needs to be synced.
@@ -115,3 +124,39 @@ Sync Engine → Message Queue → User Interface
 5. **Data Sender** pushes the transformed data to the destination system.
 6. **State Management** updates the state of the sync operation.
 7. **Event Dispatcher** emits relevant events.
+
+
+
+
+### Configuration Manager:
+
+#### 1. Config Loader
+Reads configuration files or fetches them from a remote source.
+   
+#### 2. Config Validator
+Ensures that the loaded configurations are valid and meet all requirements.
+  
+#### 3. Config Cache
+Temporarily stores loaded configurations for quick retrieval.
+
+#### 4. Config Watcher
+Listens for changes in configuration and triggers updates when necessary.
+   
+#### 5. Change Notifier
+Communicates with other parts of the system to notify them of configuration changes.
+
+#### 6. Backup Manager
+Backs up configurations to enable rollback in case of issues.
+
+#### 7.Audit Trail
+Logs changes to configurations for auditing purposes.
+
+#### Data Flow:
+
+1. **Config Loader** reads or fetches the configuration.
+2. **Config Validator** validates the loaded configuration.
+3. Valid configurations are cached in **Config Cache**.
+4. **Config Watcher** keeps an eye out for any changes in configuration.
+5. **Change Notifier** informs other system components of any changes.
+6. **Backup Manager** backs up configurations.
+7. **Audit Trail** logs the changes.

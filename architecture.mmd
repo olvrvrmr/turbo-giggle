@@ -26,6 +26,15 @@ graph TB
             RateLimiter-.->DataSender;
         end
 
+        subgraph ConfigurationManager
+            ConfigLoader-->ConfigValidator;
+            ConfigValidator-->ConfigCache;
+            ConfigCache-->ChangeNotifier;
+            ConfigWatcher-->ConfigLoader;
+            ChangeNotifier-->BackupManager;
+            BackupManager-->AuditTrail;
+        end
+
         CM[Configuration Manager] -->|Update Settings| MQ[Message Queue]
         Scheduler -->|Trigger Events| MQ
         MQ -->|Receive Trigger Events| SyncEngine
@@ -44,5 +53,4 @@ graph TB
     end
     
     MQ -->|Update Records| DB
-    class UI,CM,Scheduler,SyncEngine,DB,MQ,Auth,TGM,CL,TQM,SM,EH,LM,API,ConnectorInterface,DataFetcher,DataSender,TransformationEngine,SyncRulesEngine,ErrorHandler,StateManagement,EventDispatcher,RateLimiter component;
-
+    class UI,CM,Scheduler,SyncEngine,DB,MQ,Auth,TGM,CL,TQM,SM,EH,LM,API,ConnectorInterface,DataFetcher,DataSender,TransformationEngine,SyncRulesEngine,ErrorHandler,StateManagement,EventDispatcher,RateLimiter,ConfigLoader,ConfigValidator,ConfigCache,ConfigWatcher,ChangeNotifier,BackupManager,AuditTrail component;
